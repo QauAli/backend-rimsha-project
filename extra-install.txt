@@ -1,0 +1,6 @@
+python-dotenv
+flask-smorest
+OPENAPI-SPEC-VALIDATOR
+pyodbc
+mysql-connector-python
+flask-jwt-extended
