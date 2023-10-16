@@ -28,6 +28,13 @@ class CustomerUpdateSchema(Schema):
     Password = fields.Str(required=True)
 
 
+class CustomerLoginSchema(Schema):
+    C_FirstName = fields.Str(required=True)
+    Password = fields.Str(required=True)
+
+
+
+
 class BillSchema(Schema):
     Bill_id = fields.Int(required=True)
     B_amount = fields.Int(required=True)

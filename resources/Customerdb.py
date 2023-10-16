@@ -69,7 +69,7 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
-
+        
 
     def delete_customer(self, Customer_id):
         query = f"DELETE FROM customer WHERE Customer_id ='{Customer_id}' "
@@ -80,6 +80,16 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
+        
+
+
+
+    def verify_customer(self, C_FirstName, Password):
+       query = f"SELECT COUNT(*) FROM customer WHERE C_FirstName = '{C_FirstName}' AND Password = '{Password}'"
+       self.cursor.execute(query)
+       result = self.cursor.fetchone()
+       return result[0] > 0  # Return True if there's a matching record, False otherwise
+
 
 
     def close(self):
