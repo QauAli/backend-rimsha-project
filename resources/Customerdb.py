@@ -84,8 +84,19 @@ class MyDatabase:
 
 
 
-    def verify_customer(self, C_FirstName, Password):
-       query = f"SELECT COUNT(*) FROM customer WHERE C_FirstName = '{C_FirstName}' AND Password = '{Password}'"
+    def verify_admin(self, email, password):
+       query = f"SELECT * FROM admin WHERE email = '{email}' AND `password` = '{password}'"
+       self.cursor.execute(query)
+       return self.cursor.fetchone()
+
+    def verify_staff(self, email, password):
+       query = f"SELECT COUNT(*) FROM staff WHERE email = '{email}' AND password = '{password}'"
+       self.cursor.execute(query)
+       result = self.cursor.fetchone()
+       return result[0] > 0  # Return True if there's a matching record, False otherwise
+    
+    def verify_customer(self, email, password):
+       query = f"SELECT COUNT(*) FROM admin WHERE email = '{email}' AND password = '{password}'"
        self.cursor.execute(query)
        result = self.cursor.fetchone()
        return result[0] > 0  # Return True if there's a matching record, False otherwise

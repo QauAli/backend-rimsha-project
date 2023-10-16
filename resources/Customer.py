@@ -2,27 +2,40 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from resources.schemas  import CustomerSchema
-from resources.schemas  import CustomerLoginSchema
+from resources.schemas  import LoginSchema
 from resources.schemas  import CustomerUpdateSchema
 from resources.Customerdb import MyDatabase
 import hashlib
+import json
+
+
 blp = Blueprint("customer", __name__, description="Operations on customer")
 
 
 @blp.route("/login")
 class Login(MethodView):
-     def __init__(self):
+    def __init__(self):
         self.db = MyDatabase()
 
-     @blp.arguments(CustomerLoginSchema)
-     def post(self, request_data):
-          C_FirstName = request_data.get('C_FirstName')
-          Password = request_data.get("Password")
-          result= self.db.verify_customer(C_FirstName,Password)
-          if result:
-              return "login successfully"
-          else:
-           return "Record doesn't exist"
+    def get(self):
+        return ("get login called")
+
+    @blp.arguments(LoginSchema)
+    def post(self, request_data):
+        email = request_data.get('email')
+        password = request_data.get("password")
+        role=request_data.get("role")
+        if(role == "admin"):
+            result= self.db.verify_admin(email,password,)
+            return(json.dumps(result))
+        elif(role == "customer"):
+            result= self.db.verify_customer(email,password,)
+            return(json.dumps(result))
+
+        else:
+            result= self.db.verify_staff(email,password,)
+            return(json.dumps(result))
+
 
 
 

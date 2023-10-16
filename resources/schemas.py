@@ -28,9 +28,12 @@ class CustomerUpdateSchema(Schema):
     Password = fields.Str(required=True)
 
 
-class CustomerLoginSchema(Schema):
-    C_FirstName = fields.Str(required=True)
-    Password = fields.Str(required=True)
+class LoginSchema(Schema):
+    email = fields.Str(required=True)
+    password = fields.Str(required=True)
+    role = fields.Str(required=True)
+
+
 
 
 
