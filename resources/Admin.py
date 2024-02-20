@@ -2,6 +2,7 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from resources.schemas import AdminSchema
+from resources.schemas import AdminUpdateSchema
 from resources.Admindb import MyDatabase
 
 blp = Blueprint("admin", __name__, description="Operations on admin")
@@ -22,9 +23,9 @@ class Admin(MethodView):
         return {'message': "admin added successfully"}, 201
 
     # put is used for updating the data
-    @blp.arguments(AdminSchema)
+    @blp.arguments(AdminUpdateSchema)
     def put(self, request_data):
-        Admin_id  = request_data.get('Admin_id ')
+        Admin_id  = request_data.get('Admin_id')
         print(f"Received request with ID: {Admin_id}")
         # id = args.get('id')
         if self.db.update_admin(Admin_id , request_data):

@@ -65,6 +65,15 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
+        
+
+    def get_total_services(self):
+        query = "SELECT COUNT(*) FROM services"
+        self.cursor.execute(query)
+    
+    # Fetch the count value
+        total_services = self.cursor.fetchone()[0]
+        return total_services
 
 
     def close(self):

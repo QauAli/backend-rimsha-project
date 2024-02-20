@@ -1,0 +1,32 @@
+
+
+GET http://127.0.0.1:5000/customer
+
+###
+
+GET http://127.0.0.1:5000/appointment
+
+
+###
+
+GET http://127.0.0.1:5000/getAppointments
+
+
+###
+
+GET http://127.0.0.1:5000/home
+
+
+###
+GET http://127.0.0.1:5000/total_customers
+
+###
+GET http://127.0.0.1:5000/total_staff
+
+###
+GET http://127.0.0.1:5000/total_services
+
+
+###
+GET http://127.0.0.1:5000/total_bills
+

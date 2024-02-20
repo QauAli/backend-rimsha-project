@@ -59,6 +59,9 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
+        
+
+    
 
 
     def delete_staff(self, id):
@@ -70,6 +73,16 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
+        
+
+    def get_total_staff(self):
+        query = "SELECT COUNT(*) FROM staff"
+        self.cursor.execute(query)
+    
+    # Fetch the count value
+        total_staff_members = self.cursor.fetchone()[0]
+        return total_staff_members
+
 
 
     def close(self):
@@ -80,11 +93,6 @@ class MyDatabase:
 
 # Create an instance of the MyDatabase class
 db = MyDatabase()
-
-# Call the get_staffs method to retrieve and print data every 4 functions call
-# db.delete_staff(id="2324")
-
-# Close the database connection when you are done with it
 db.close()
 
 

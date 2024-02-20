@@ -63,3 +63,14 @@ class Service(MethodView):
         if self.db.delete_service(Service_id):
             return {"message": "service deleted successfully"}
         abort(404, "service not found")
+
+
+@blp.route("/total_services")
+class TotalServices(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        total_services = self.db.get_total_services()
+        response = {"total_services_provided": total_services}
+        return response

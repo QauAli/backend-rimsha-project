@@ -61,7 +61,6 @@ class AppointmentSchema(Schema):
     Appointment_Time = fields.Time(required=True)
 
 class AppointmentAddSchema(Schema):
-    Appointment_id = fields.Int(required=True)
     Appointment_Date = fields.Date(required=True)
     Appointment_Time = fields.Time(required=True)
     Name = fields.Str(required=True)
@@ -78,3 +77,21 @@ class AdminSchema(Schema):
     email = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
     role = fields.Str(required=True)
+
+class AdminUpdateSchema(Schema):
+    Admin_id = fields.Int(required=True)
+    name = fields.Str(required=True)
+    password = fields.Str(required=True)
+    email = fields.Str(required=True)
+
+
+
+class ProfileUpdateSchema(Schema):
+    id = fields.Int(required=True)
+    name = fields.String()
+    email = fields.String()
+    password = fields.String()
+    role = fields.String()
+
+class MarkRead(Schema):
+    Appointment_id = fields.Int(required=True) 

@@ -67,6 +67,16 @@ class MyDatabase:
         else:
             self.connection.commit()
             return 1
+        
+
+    def get_total_bills(self):
+        query = "SELECT COUNT(*) FROM bills"
+        self.cursor.execute(query)
+    
+    # Fetch the count value
+        total_bills = self.cursor.fetchone()[0]
+        return total_bills
+
 
 
     def close(self):

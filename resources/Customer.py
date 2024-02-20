@@ -4,6 +4,7 @@ from flask_smorest import Blueprint, abort
 from resources.schemas  import CustomerSchema
 from resources.schemas  import LoginSchema
 from resources.schemas  import CustomerUpdateSchema
+from resources.schemas  import ProfileUpdateSchema
 from resources.Customerdb import MyDatabase
 import hashlib
 import json
@@ -12,29 +13,57 @@ import json
 blp = Blueprint("customer", __name__, description="Operations on customer")
 
 
+
 @blp.route("/login")
 class Login(MethodView):
     def __init__(self):
         self.db = MyDatabase()
 
-    def get(self):
-        return ("get login called")
-
     @blp.arguments(LoginSchema)
     def post(self, request_data):
-        email = request_data.get('email')
-        password = request_data.get("password")
-        role=request_data.get("role")
-        if(role == "admin"):
-            result= self.db.verify_admin(email,password,)
-            return(json.dumps(result))
-        elif(role == "customer"):
-            result= self.db.verify_customer(email,password,)
-            return(json.dumps(result))
+          email = request_data.get("email")
+          password = request_data.get("password")
+          role = request_data.get("role")
+          result= self.db.verify_user(email,password,role)
+          if result:
+              return result, 200
+          else:
+           return abort(404, message="Record doesn't exist")
+          
 
+@blp.route("/ProfileUpdate")
+class Profile(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    @blp.arguments(ProfileUpdateSchema)
+    def put(self, request_data):
+        print("hello i am update profile")
+        user_id = request_data.get("id")
+        print(user_id)
+        if not user_id:
+            return abort(400, message="User ID not provided")
+
+        # Prepare the fields based on the data provided in request_data
+        fields = {
+            'name': request_data.get('name'),
+            'password': request_data.get('password'),
+            'email': request_data.get('email'),
+        }
+        print(fields)
+
+        result = self.db.update_profile(id=user_id, body=fields)
+        print("update function call")
+
+        if result:
+            return {"message": "Record updated successfully"}, 200
+            print("function update if statement executed")
         else:
-            result= self.db.verify_staff(email,password,)
-            return(json.dumps(result))
+            return abort(404, message="Record doesn't exist")
+        print("function update else statement executed")
+
+
+
 
 
 
@@ -65,6 +94,7 @@ class Customer(MethodView):
             if customer is None:
                 abort(404, message="Record doesn't exist")
             return customer
+        
 
     # post is use for adding the data
     @blp.arguments(CustomerSchema)
@@ -103,3 +133,15 @@ class Customer(MethodView):
         if self.db.delete_customer(Customer_id):
             return {"message": "customer deleted successfully"}
         abort(404, "customer not found")
+
+
+
+@blp.route("/total_customers")
+class TotalCustomers(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        total_customers = self.db.get_total_customers()
+        response = {"total_customers": total_customers}
+        return response

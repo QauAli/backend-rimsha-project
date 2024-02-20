@@ -64,3 +64,15 @@ class Staff(MethodView):
         if self.db.delete_staff(id):
             return {"message": "staff member deleted successfully"}
         abort(404, "staff member not found")
+
+
+
+@blp.route("/total_staff")
+class TotalStaff(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        total_staff_members = self.db.get_total_staff()
+        response = {"total_staff_members": total_staff_members}
+        return response

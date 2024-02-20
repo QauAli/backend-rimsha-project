@@ -3,25 +3,27 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from resources.schemas import AppointmentSchema
 from resources.schemas import AppointmentAddSchema
+from resources.schemas import MarkRead
 from resources.Appointmentdb import MyDatabase
 
 blp = Blueprint("appointment", __name__, description="Operations on appointment")
+new_appointment_count = 0
 
 @blp.route("/appointment")
 class Appointment(MethodView):
     def __init__(self):
         self.db = MyDatabase()
         # get is used for retriving the specific data
-    def getall(self):
-     Appointment_id = request.args.get("Appointment_id")
-     if Appointment_id is None:
-      return self.db.get_appointments()
-     else:
-      appointment = self.db.get_appointment(Appointment_id)
-      print(appointment)
-      if appointment is None:
-          abort(404, message="Record doesn't exist")
-      return appointment
+    # def getall(self):
+    #  Appointment_id = request.args.get("Appointment_id")
+    #  if Appointment_id is None:
+    #   return self.db.get_appointments()
+    #  else:
+    #   appointment = self.db.get_appointment(Appointment_id)
+    #   print(appointment)
+    #   if appointment is None:
+    #       abort(404, message="Record doesn't exist")
+    #   return appointment
 
     def get(self):
         Appointment_id = request.args.get("Appointment_id")
@@ -40,8 +42,6 @@ class Appointment(MethodView):
       Appointment_id = request_data.get('Appointment_id')
       self.db.add_appointment(Appointment_id, request_data)
       return{'message': "Appointment added successfully"}, 201
-
-
 
 
   # put is used for updating the data
@@ -64,3 +64,31 @@ class Appointment(MethodView):
         if self.db.delete_appointment(Appointment_id):
             return {"message": "appointment deleted successfully"}
         abort(404, "appointment not found")
+
+
+
+@blp.route("/unread_appointments")
+class TotalAppointments(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        new_appointments = self.db.get_is_read()
+        response = {"new_appointments": new_appointments}
+        return response
+
+
+@blp.route("/mark-read")
+class MarkReadAppointment(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    @blp.arguments(MarkRead)
+    def put(self, request_data):
+        Appointment_id = request_data.get('Appointment_id')
+        print(f"Received request to mark as read: {Appointment_id}")
+
+        # Update the Is_read column in the database
+        if self.db.mark_appointment_as_read(Appointment_id,request_data):
+            return {"message": "Appointment marked as read successfully"},201
+        abort(404, "Appointment not found")

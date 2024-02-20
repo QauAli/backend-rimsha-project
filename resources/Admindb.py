@@ -18,7 +18,7 @@ class MyDatabase:
         self.connection.commit()
 
     def update_admin(self, Admin_id, body):
-        query = f"UPDATE admin SET password='{body['password']}', name='{body['name']}' WHERE Admin_id='{Admin_id}'"
+        query = f"UPDATE admin SET password='{body['password']}', name='{body['name']}', email='{body['email']}' WHERE Admin_id='{Admin_id}'"
         print(query)
         self.cursor.execute(query)
         if self.cursor.rowcount == 0:

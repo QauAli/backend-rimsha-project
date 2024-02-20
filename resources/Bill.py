@@ -56,11 +56,20 @@ class Bill(MethodView):
 
 
 
-# @blp.route('/bill', methods=['DELETE'])
-
     def delete(self):
         Bill_id = request.args.get('Bill_id')  # Use request.args.get to retrieve 'id' from the query parameters
 
         if self.db.delete_bill(Bill_id):
             return {"message": "bill deleted successfully"}
         abort(404, "bill not found")
+
+
+@blp.route("/total_bills")
+class TotalBills(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        total_bills = self.db.get_total_bills()
+        response = {"total_bills": total_bills}
+        return response

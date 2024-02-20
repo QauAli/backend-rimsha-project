@@ -41,6 +41,37 @@ class MyDatabase:
             appointment_dict["Appointment_Date"] = row[2]
             appointment_dict["Appointment_Time"] = row[3]
         return [appointment_dict]
+    
+
+    def get_is_read(self):
+     query = "SELECT COUNT(*) FROM  appointment WHERE Is_read = 'no'"
+    # Execute the query
+     self.cursor.execute(query)
+    # Fetch the result
+     result = self.cursor.fetchone()
+    
+    # Check if result is not None before subscripting
+     if result is not None:
+        new_appointments = result[0]
+        return new_appointments
+     else:
+        # Handle the case where the query didn't return any result
+        return 0
+     
+
+    def mark_appointment_as_read(self, Appointment_id,body):
+     query = f"UPDATE appointment SET Is_read='{body['yes']}' WHERE Appointment_id='{Appointment_id}'"
+     self.cursor.execute(query)
+
+     if self.cursor.rowcount == 0:
+            return 0
+     else:
+            self.connection.commit()
+            return 1
+     
+     
+
+        
 
     def add_appointment(self,Appointment_id, body):
         query = f"INSERT INTO appointment (Appointment_id, Appointment_Date, Appointment_Time,Name,C_Email_Id,Car_Model_Make,City,ContactNo,Description) VALUES ( '{Appointment_id}','{body['Appointment_Date']}', '{body['Appointment_Time']}','{body['Name']}','{body['C_Email_Id']}','{body['Car_Model_Make']}','{body['City']}','{body['ContactNo']}','{body['Description']}')"
