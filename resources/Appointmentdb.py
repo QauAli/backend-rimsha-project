@@ -44,7 +44,7 @@ class MyDatabase:
     
 
     def get_is_read(self):
-     query = "SELECT COUNT(*) FROM  appointment WHERE Is_read = 'no'"
+     query = "SELECT COUNT(*) FROM  appointment WHERE Is_read = '0'"
     # Execute the query
      self.cursor.execute(query)
     # Fetch the result
@@ -60,7 +60,7 @@ class MyDatabase:
      
 
     def mark_appointment_as_read(self, Appointment_id,body):
-     query = f"UPDATE appointment SET Is_read='{body['yes']}' WHERE Appointment_id='{Appointment_id}'"
+     query = f"UPDATE appointment SET Is_read='1' WHERE Appointment_id='{Appointment_id}'"
      self.cursor.execute(query)
 
      if self.cursor.rowcount == 0:

@@ -49,6 +49,7 @@ class Profile(MethodView):
             'name': request_data.get('name'),
             'password': request_data.get('password'),
             'email': request_data.get('email'),
+            'newpassword': request_data.get('newpassword'),
         }
         print(fields)
 
@@ -61,6 +62,7 @@ class Profile(MethodView):
         else:
             return abort(404, message="Record doesn't exist")
         print("function update else statement executed")
+
 
 
 

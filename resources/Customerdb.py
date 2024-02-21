@@ -112,17 +112,16 @@ class MyDatabase:
     
      return user_dict
     
+    
 
+    
     def update_profile(self, id, body):
     
     # Extract relevant information
      name = body.get("name")
      password = body.get("password")
+     newpassword = body.get("newpassword")
      email = body.get("email")
-     print("name" + name)
-     print(f"Type of 'name': {type(name)}")
-     print(f"Value of 'name': {name}")
-
 
     # Validate that at least one of the fields is present
      if name is None and password is None and email is None:
@@ -131,35 +130,32 @@ class MyDatabase:
     # Determine the table and update fields based on the user's role obtained during login
      role = self.get_user_role(email, password)
      print("entered role is" +  str(role))
+     print("")
 
      if role == 'admin':
         query = f"""
-            UPDATE admin SET name='{name}', password='{password}', email='{email}' WHERE Admin_id = {id}
+            UPDATE admin SET name='{name}', password='{newpassword}' WHERE Admin_id = {id}
         """
      elif role == 'customer':
           query = f"""
-            UPDATE customer SET C_FirstName='{name}', Password='{password}', C_Email_Id='{email}' WHERE Customer_id = {id}
+            UPDATE customer SET C_FirstName='{name}', Password='{newpassword}' WHERE Customer_id = {id}
         """
      elif role == 'staff':
           query = f"""
-            UPDATE staff SET staff_Name='{name}', password='{password}', email='{email}' WHERE id = {id}
+            UPDATE staff SET staff_Name='{name}', password='{newpassword}' WHERE id = {id}
         """
      else:
         return 0
-
+     
     # Execute the query
      self.cursor.execute(query)
-     print(f"Email in get_user_role: {email}")
-     print(f"Password in get_user_role: {password}")
-
-
     # Check for a successful update
      if self.cursor.rowcount == 0:
         return 0
      else:
         self.connection.commit()
         return 1
-
+     
     def get_user_role(self, email, password):
      query = f"""
         SELECT 'admin' as role FROM admin WHERE email = '{email}' AND password = '{password}'

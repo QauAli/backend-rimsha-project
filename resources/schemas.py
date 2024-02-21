@@ -92,6 +92,7 @@ class ProfileUpdateSchema(Schema):
     email = fields.String()
     password = fields.String()
     role = fields.String()
+    newpassword = fields.String()
 
 class MarkRead(Schema):
     Appointment_id = fields.Int(required=True) 

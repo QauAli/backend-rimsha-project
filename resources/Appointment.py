@@ -78,7 +78,7 @@ class TotalAppointments(MethodView):
         return response
 
 
-@blp.route("/mark-read")
+@blp.route("/mark_read")
 class MarkReadAppointment(MethodView):
     def __init__(self):
         self.db = MyDatabase()
