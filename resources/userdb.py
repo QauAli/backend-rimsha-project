@@ -43,12 +43,10 @@ class MyDatabase:
         return [user_dict]
 
     def add_user(self,user_id, body):
-
-
-
         query = f"INSERT INTO user (user_id, username, email, password) VALUES ( '{user_id}','{body['username']}', '{body['email']}', '{body['password']}')"
         self.cursor.execute(query)
         self.connection.commit()
+        
 
     def update_user(self, user_id, body):
         query = f"UPDATE user SET password='{body['password']}', username='{body['username']}' WHERE user_id='{user_id}'"

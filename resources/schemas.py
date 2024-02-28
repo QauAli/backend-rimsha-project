@@ -87,7 +87,6 @@ class AdminUpdateSchema(Schema):
 
 
 class ProfileUpdateSchema(Schema):
-    id = fields.Int(required=True)
     name = fields.String()
     email = fields.String()
     password = fields.String()

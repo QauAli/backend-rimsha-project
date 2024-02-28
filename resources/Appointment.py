@@ -1,4 +1,5 @@
 from flask import request
+from datetime import datetime, timedelta
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from resources.schemas import AppointmentSchema
@@ -92,3 +93,22 @@ class MarkReadAppointment(MethodView):
         if self.db.mark_appointment_as_read(Appointment_id,request_data):
             return {"message": "Appointment marked as read successfully"},201
         abort(404, "Appointment not found")
+
+
+@blp.route("/total_appointments_in_month")
+class TotalAppointments(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self, year, month):
+        try:
+            start_date = datetime(year, month, 1)
+            end_date = start_date.replace(day=1, month=start_date.month+1) - timedelta(days=1)
+
+            total_appointments = self.db.get_total_appointments_in_month(start_date, end_date)
+            response = {"total_appointments": total_appointments}
+            return response
+
+        except Exception as e:
+            # Handle exceptions appropriately (e.g., log the error)
+            return {"error": str(e)}

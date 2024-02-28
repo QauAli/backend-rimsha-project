@@ -7,6 +7,7 @@ from resources.Bill import blp as BillBlueprint
 from resources.Service import blp as ServiceBlueprint
 from resources.Appointment import blp as AppointmentBlueprint
 from resources.Admin import blp as AdminBlueprint
+from resources.Signup import blp as SignupBlueprint
 #from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
 app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 app.config["OPENAPI_VERSION"] = "3.0.3"  # Specify the OpenAPI version
 # app.config["JWT_SECRET_KEY"] = "8936237764654272374842989792124209905"
+app.config['UPLOAD_FOLDER'] = "UPLOAD_FOLDER"
 
 api = Api(app)
 # jwt = JWTManager(app)
@@ -28,6 +30,7 @@ api.register_blueprint(BillBlueprint)
 api.register_blueprint(ServiceBlueprint)
 api.register_blueprint(AppointmentBlueprint)
 api.register_blueprint(AdminBlueprint)
+api.register_blueprint(SignupBlueprint)
 
 CORS(app)
 

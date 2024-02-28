@@ -100,6 +100,22 @@ class MyDatabase:
             return 1
 
 
+
+    def get_total_appointments_in_month(self, start_date, end_date):
+        try:
+            query = "SELECT COUNT(*) FROM appointment WHERE Appointment_Date >= %s AND Appointment_Date <= %s"
+            self.cursor.execute(query, (start_date, end_date))
+
+            # Fetch the count value
+            total_appointments = self.cursor.fetchone()[0]
+            return total_appointments
+
+        except Exception as e:
+            # Handle exceptions appropriately (e.g., log the error)
+            return {"error": str(e)}
+        
+        
+
     def close(self):
 # Close the cursor and connection when done
       self.cursor.close()

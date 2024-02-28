@@ -1,6 +1,9 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
+import os
+from flask import jsonify
+from werkzeug.utils import secure_filename
 from resources.schemas  import CustomerSchema
 from resources.schemas  import LoginSchema
 from resources.schemas  import CustomerUpdateSchema
@@ -8,6 +11,12 @@ from resources.schemas  import ProfileUpdateSchema
 from resources.Customerdb import MyDatabase
 import hashlib
 import json
+
+UPLOAD_FOLDER = 'C:/xampp/htdocs/img'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 blp = Blueprint("customer", __name__, description="Operations on customer")
@@ -31,6 +40,39 @@ class Login(MethodView):
            return abort(404, message="Record doesn't exist")
           
 
+@blp.route("/ImageUpload")
+class ImageUpload(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def post(self):
+        email = request.form.get("email")
+        role = request.form.get("role")
+
+        if 'file' not in request.files:
+            return jsonify({"message": "No file part"}), 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({"message": "No selected file"}), 400
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(file_path)
+
+            # Call the upload_profile_image function
+            if self.db.upload_profile_image(email, file_path, role):
+                return jsonify({"message": "Image uploaded and profile updated successfully"}), 200
+            else:
+                return jsonify({"message": "Error updating profile"}), 500
+
+        return jsonify({"message": "Invalid file extension"}), 400
+
+          
+
+
 @blp.route("/ProfileUpdate")
 class Profile(MethodView):
     def __init__(self):
@@ -38,30 +80,23 @@ class Profile(MethodView):
 
     @blp.arguments(ProfileUpdateSchema)
     def put(self, request_data):
-        print("hello i am update profile")
-        user_id = request_data.get("id")
-        print(user_id)
-        if not user_id:
-            return abort(400, message="User ID not provided")
+    # Remove the 'id' parameter as it is not needed
+     fields = {
+        'name': request_data.get('name'),
+        'password': request_data.get('password'),
+        'email': request_data.get('email'),
+        'newpassword': request_data.get('newpassword'),
+    }
+     print(fields)
 
-        # Prepare the fields based on the data provided in request_data
-        fields = {
-            'name': request_data.get('name'),
-            'password': request_data.get('password'),
-            'email': request_data.get('email'),
-            'newpassword': request_data.get('newpassword'),
-        }
-        print(fields)
+     result = self.db.update_profile(body=fields)  # Remove 'id' parameter
+     print("update function call")
 
-        result = self.db.update_profile(id=user_id, body=fields)
-        print("update function call")
+     if result:
+      return {"message": "Record updated successfully"}, 200
+     else:
+        return abort(404, message="Record doesn't exist")
 
-        if result:
-            return {"message": "Record updated successfully"}, 200
-            print("function update if statement executed")
-        else:
-            return abort(404, message="Record doesn't exist")
-        print("function update else statement executed")
 
 
 

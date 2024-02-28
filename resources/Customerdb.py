@@ -49,8 +49,8 @@ class MyDatabase:
             customer_dict["Password"] = row[7]
         return [customer_dict]
 
-    def add_customer(self, C_Email_Id, Password, C_FirstName):
-        query = f"INSERT INTO customer (C_Email_Id, Password, C_FirstName) VALUES ('{C_Email_Id}', '{Password}', '{C_FirstName}')"
+    def add_customer(self,  C_FirstName, C_Email_Id, Password):
+        query = f"INSERT INTO customer (C_FirstName, C_Email_Id, Password,) VALUES ('{C_FirstName}','{C_Email_Id}', '{Password}')"
         self.cursor.execute(query)
         self.connection.commit()
 
@@ -100,23 +100,55 @@ class MyDatabase:
         SELECT C_Email_Id as email, Password as password, 'customer' as role FROM customer WHERE C_Email_Id = '{email}' AND Password = '{password}' 
         UNION
         SELECT email, password, 'staff' as role FROM staff WHERE email = '{email}' AND password = '{password}';
-        """
+    """
 
      self.cursor.execute(query)
      row = self.cursor.fetchone()
-   
-     user_dict={}
-     user_dict["email"] = row[0]
-     user_dict["password"] = row[1]
-     user_dict["role"] = row[2]
-    
-     return user_dict
-    
-    
 
+     if row is not None:
+        user_dict = {
+            "email": row[0],
+            "password": row[1],
+            "role": row[2]
+        }
+        return user_dict
+     else:
+        return None
+     
+
+
+    def upload_profile_image(self, email, file_path, role):
+    # Update the table associated with the user's role
+     if role == 'admin':
+        table_name = 'admin'
+        email_column = 'email'
+     elif role == 'customer':
+        table_name = 'customer'
+        email_column = 'C_Email_Id'
+     elif role == 'staff':
+        table_name = 'staff'
+        email_column = 'email'
+     else:
+        # Handle unsupported roles
+        return False
+
+    # Insert the image path into the corresponding table
+     query = f"""
+        UPDATE {table_name} SET Image = '{file_path}' WHERE {email_column} = '{email}';
+    """
+
+     try:
+        self.cursor.execute(query)
+        self.connection.commit()
+        return True
+     except Exception as e:
+        print(f"Error uploading profile image: {e}")
+        self.connection.rollback()
+        return False
+
+     
     
-    def update_profile(self, id, body):
-    
+    def update_profile(self, body):
     # Extract relevant information
      name = body.get("name")
      password = body.get("password")
@@ -134,15 +166,15 @@ class MyDatabase:
 
      if role == 'admin':
         query = f"""
-            UPDATE admin SET name='{name}', password='{newpassword}' WHERE Admin_id = {id}
+            UPDATE admin SET name='{name}', password='{newpassword}' WHERE email = '{email}' AND password = '{password}'
         """
      elif role == 'customer':
-          query = f"""
-            UPDATE customer SET C_FirstName='{name}', Password='{newpassword}' WHERE Customer_id = {id}
+        query = f"""
+            UPDATE customer SET C_FirstName='{name}', Password='{newpassword}' WHERE C_Email_id = '{email}' AND Password = '{password}'
         """
      elif role == 'staff':
-          query = f"""
-            UPDATE staff SET staff_Name='{name}', password='{newpassword}' WHERE id = {id}
+        query = f"""
+            UPDATE staff SET staff_Name='{name}', password='{newpassword}' WHERE email = '{email}' AND password = '{password}'
         """
      else:
         return 0
@@ -187,11 +219,6 @@ class MyDatabase:
 
 # Create an instance of the MyDatabase class
 db = MyDatabase()
-
-# Call the get_items method to retrieve and print data every 4 functions call
-# db.delete_item(id="2324")
-
-# Close the database connection when you are done with it
 db.close()
 
 
