@@ -44,30 +44,27 @@ class MyDatabase:
     
 
     def get_is_read(self):
-     query = "SELECT COUNT(*) FROM  appointment WHERE Is_read = '0'"
-    # Execute the query
+     query = "SELECT COUNT(*) FROM appointment WHERE Is_read = '0'"
      self.cursor.execute(query)
-    # Fetch the result
      result = self.cursor.fetchone()
-    
-    # Check if result is not None before subscripting
-     if result is not None:
-        new_appointments = result[0]
-        return new_appointments
-     else:
-        # Handle the case where the query didn't return any result
-        return 0
-     
 
-    def mark_appointment_as_read(self, Appointment_id,body):
+     if result is not None:
+        new_appointments_count = result[0]
+        return {"new_appointments_count": new_appointments_count}
+     else:
+        return {"new_appointments_count": 0}
+
+
+    def mark_appointment_as_read(self, Appointment_id, body):
      query = f"UPDATE appointment SET Is_read='1' WHERE Appointment_id='{Appointment_id}'"
      self.cursor.execute(query)
 
      if self.cursor.rowcount == 0:
-            return 0
+        return {"new_appointments_count": 0}
      else:
-            self.connection.commit()
-            return 1
+        self.connection.commit()
+        return self.get_is_read()
+
      
      
 
