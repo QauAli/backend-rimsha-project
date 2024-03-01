@@ -149,7 +149,6 @@ class Customer(MethodView):
 
 
 
-
     # put is used for updating the data
     @blp.arguments(CustomerUpdateSchema)
     def put(self, request_data):
@@ -182,3 +181,22 @@ class TotalCustomers(MethodView):
         total_customers = self.db.get_total_customers()
         response = {"total_customers": total_customers}
         return response
+
+
+
+@blp.route("/feedback")
+class Feedback(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def put(self):
+        request_data = request.get_json()
+        C_Email_Id = request_data.get('C_Email_Id')
+        Feedback = request_data.get('Feedback')
+
+        # Check if the customer already exists based on email
+        if self.db.check_customer(C_Email_Id):
+            self.db.update_feedback(C_Email_Id, Feedback)
+            return {'message': "Feedback added successfully"}, 201
+        else:
+            return {'error': "Customer does not exist"}, 404

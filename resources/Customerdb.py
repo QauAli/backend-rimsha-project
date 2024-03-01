@@ -54,6 +54,24 @@ class MyDatabase:
         self.cursor.execute(query)
         self.connection.commit()
 
+
+
+    def update_feedback(self, C_Email_Id, Feedback):
+        try:
+            query = f"UPDATE customer SET Feedback='{Feedback}' WHERE C_Email_Id='{C_Email_Id}'"
+            self.cursor.execute(query)
+            self.connection.commit()
+        except Exception as e:
+            print(f"Error adding feedback: {str(e)}")
+            self.connection.rollback()
+
+
+    def check_customer(self, C_Email_Id):
+        query = f"SELECT * FROM customer WHERE C_Email_Id = '{C_Email_Id}'"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        return result is not None
+
     def customer_exists(self, C_Email_Id, C_FirstName):
         query = f"SELECT * FROM customer WHERE C_Email_Id = '{C_Email_Id}' AND C_FirstName = '{C_FirstName}'"
         self.cursor.execute(query)

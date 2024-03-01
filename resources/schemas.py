@@ -95,3 +95,9 @@ class ProfileUpdateSchema(Schema):
 
 class MarkRead(Schema):
     Appointment_id = fields.Int(required=True) 
+
+class ContactUsSchema(Schema):
+    FirstName = fields.String()
+    LastName  = fields.String()
+    Email_id  = fields.String()
+    Message  = fields.String()

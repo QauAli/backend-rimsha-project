@@ -30,3 +30,15 @@ GET http://127.0.0.1:5000/total_services
 ###
 GET http://127.0.0.1:5000/total_bills
 
+
+###
+POST http://127.0.0.1:5000/contact_us
+Content-Type: application/json
+
+{
+  "FirstName": "hafsa",
+  "LastName": "Khan",
+  "Email_id": "hafsakhan12@gmail.com",
+  "Message": "hello"
+}
+

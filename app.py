@@ -8,6 +8,7 @@ from resources.Service import blp as ServiceBlueprint
 from resources.Appointment import blp as AppointmentBlueprint
 from resources.Admin import blp as AdminBlueprint
 from resources.Signup import blp as SignupBlueprint
+from resources.ContactUs import blp as ContactUsBlueprint
 #from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
@@ -31,7 +32,7 @@ api.register_blueprint(ServiceBlueprint)
 api.register_blueprint(AppointmentBlueprint)
 api.register_blueprint(AdminBlueprint)
 api.register_blueprint(SignupBlueprint)
-
+api.register_blueprint(ContactUsBlueprint)
 CORS(app)
 
 if __name__ == '__main__':
