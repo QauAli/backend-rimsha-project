@@ -101,25 +101,29 @@ class Profile(MethodView):
 
 
 
-
-
-
-
 @blp.route("/customer")
 class Customer(MethodView):
     def __init__(self):
         self.db = MyDatabase()
         # get is used for retriving the specific data
     def getall(self):
+     customers = self.db.view_customer()
      Customer_id = request.args.get("Customer_id")
+
      if Customer_id is None:
-      return self.db.get_customers()
+        return customers
      else:
-      customer = self.db.get_customer(Customer_id)
-      print(customer)
-      if customer is None:
-          abort(404, message="Record doesn't exist")
-      return customer
+        # Find the customer with the specified ID
+        customer = next((c for c in customers if c["Customer_id"] == int(Customer_id)), None)
+
+        if customer is None:
+            abort(404, message="Record doesn't exist")
+
+        return customer
+
+     
+     
+
 
     def get(self):
         Customer_id = request.args.get("Customer_id")

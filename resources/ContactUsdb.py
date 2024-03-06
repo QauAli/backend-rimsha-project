@@ -22,6 +22,18 @@ class MyDatabase:
      except Exception as e:
         print(f"Error inserting data into the database: {e}")
         return None
+     
+
+    def get_is_read(self):
+     query = "SELECT COUNT(*) FROM contact_us WHERE Is_read = '0'"
+     self.cursor.execute(query)
+     result = self.cursor.fetchone()
+
+     if result is not None:
+        new_messages_count = result[0]
+        return {"new_messages_count": new_messages_count}
+     else:
+        return {"new_messages_count": 0}
 
 
 

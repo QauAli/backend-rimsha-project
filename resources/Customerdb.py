@@ -24,16 +24,16 @@ class MyDatabase:
      for row in self.cursor.fetchall():
       #to return the data in the form of json
        customer_dict={}
-       customer_dict["Customer_id"] = row[1]
-       customer_dict["C_FirstName"] = row[2]
-       customer_dict["C_LastName"] = row[3]
-       customer_dict["C_Phoneno"] = row[4]
-       customer_dict["C_Address"] = row[5]
-       customer_dict["C_Email_Id"] = row[6]
-       customer_dict["Password"] = row[7]
-       customer_dict["C_Bill-id"] = row[8]
-       customer_dict["C_Appointment-id"] = row[9]
-       customer_dict["C_Service-name"] = row[10]
+       customer_dict["Customer_id"] = row[0]
+       customer_dict["C_FirstName"] = row[1]
+       customer_dict["C_LastName"] = row[2]
+       customer_dict["C_Phoneno"] = row[3]
+       customer_dict["C_Address"] = row[4]
+       customer_dict["C_Email_Id"] = row[5]
+       customer_dict["Password"] = row[6]
+       customer_dict["C_Bill-id"] = row[7]
+       customer_dict["C_Appointment-id"] = row[8]
+       customer_dict["C_Service-name"] = row[9]
        result.append(customer_dict)
      return result
 
@@ -42,12 +42,35 @@ class MyDatabase:
         self.cursor.execute(query)
         for row in self.cursor.fetchall():
             customer_dict = {}
-            customer_dict["Customer_id"] = row[1]
-            customer_dict["C_FirstName"] = row[2]
-            customer_dict["C_LastName"] = row[3]
-            customer_dict["C_Email_Id"] = row[6]
-            customer_dict["Password"] = row[7]
+            customer_dict["Customer_id"] = row[0]
+            customer_dict["C_FirstName"] = row[1]
+            customer_dict["C_LastName"] = row[2]
+            customer_dict["C_Email_Id"] = row[5]
+            customer_dict["Password"] = row[6]
         return [customer_dict]
+    
+
+
+
+    def view_customer(self):
+     query = "SELECT Customer_id, C_FirstName, C_LastName, C_Email_Id FROM customer"
+     self.cursor.execute(query)
+
+     customers_list = []  # Initialize a list to store customer dictionaries
+
+     for row in self.cursor.fetchall():
+        customer_dict = {
+            "Customer_id": row[0],
+            "C_FirstName": row[1],
+            "C_LastName": row[2],
+            "C_Email_Id": row[5]  # Fix the index for the email field
+        }
+        customers_list.append(customer_dict)
+
+     return customers_list  
+
+
+
 
     def add_customer(self,  C_FirstName, C_Email_Id, Password):
         query = f"INSERT INTO customer (C_FirstName, C_Email_Id, Password,) VALUES ('{C_FirstName}','{C_Email_Id}', '{Password}')"

@@ -28,6 +28,9 @@ class MyDatabase:
        bill_dict["B_amount"] = row[1]
        bill_dict["Service_id"] = row[2]
        bill_dict["Customer_id"] = row[3]
+       bill_dict["Bill_date"] = row[6]
+       
+
        result.append(bill_dict)
      return result
 

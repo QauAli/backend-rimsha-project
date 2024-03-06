@@ -25,10 +25,10 @@ class MyDatabase:
       #to return the data in the form of json
        appointment_dict={}
        appointment_dict["Appointment_id"] = row[0]
-       appointment_dict["Appointment_Date"] = row[1]
-       appointment_dict["Appointment_Time"] = row[2]
-       appointment_dict["Staff_id"] = row[3]
-       appointment_dict["Customer_id"] = row[4]
+       appointment_dict["Appointment_Date"] = str(row[1])
+       appointment_dict["Appointment_Time"] = str(row[2])
+       appointment_dict["C_Email_Id"] = row[6]
+       appointment_dict["City"] = row[8]
        result.append(appointment_dict)
      return result
 
@@ -37,9 +37,10 @@ class MyDatabase:
         self.cursor.execute(query)
         for row in self.cursor.fetchall():
             appointment_dict = {}
-            appointment_dict["Appointment_id"] = row[1]
-            appointment_dict["Appointment_Date"] = row[2]
-            appointment_dict["Appointment_Time"] = row[3]
+            appointment_dict["Appointment_id"] = row[0]
+            appointment_dict["Appointment_Date"] = row[1]
+            appointment_dict["Appointment_Time"] = row[2]
+            
         return [appointment_dict]
     
 

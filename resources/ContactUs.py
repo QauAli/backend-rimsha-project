@@ -33,3 +33,14 @@ class Contact(MethodView):
             return result, 200
         else:
             return abort(500, message="Error processing the form")
+        
+        
+@blp.route("/unread_messages")
+class TotalMessages(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        new_messages = self.db.get_is_read()
+        response = {"new_messages": new_messages}
+        return response

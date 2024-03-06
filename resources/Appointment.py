@@ -15,16 +15,19 @@ class Appointment(MethodView):
     def __init__(self):
         self.db = MyDatabase()
         # get is used for retriving the specific data
-    # def getall(self):
-    #  Appointment_id = request.args.get("Appointment_id")
-    #  if Appointment_id is None:
-    #   return self.db.get_appointments()
-    #  else:
-    #   appointment = self.db.get_appointment(Appointment_id)
-    #   print(appointment)
-    #   if appointment is None:
-    #       abort(404, message="Record doesn't exist")
-    #   return appointment
+    def getall(self):
+     Appointment_id = request.args.get("Appointment_id")
+     if Appointment_id is None:
+      return self.db.get_appointments()
+     else:
+      appointment = self.db.get_appointment(Appointment_id)
+      print(appointment)
+      if appointment is None:
+          abort(404, message="Record doesn't exist")
+      return appointment
+
+
+      
 
     def get(self):
         Appointment_id = request.args.get("Appointment_id")

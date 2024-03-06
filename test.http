@@ -42,3 +42,11 @@ Content-Type: application/json
   "Message": "hello"
 }
 
+
+###
+GET http://127.0.0.1:5000/appointment
+
+
+###
+GET http://127.0.0.1:5000/unread_messages
+

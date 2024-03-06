@@ -22,6 +22,8 @@ class Bill(MethodView):
       if bill is None:
           abort(404, message="Record doesn't exist")
       return bill
+     
+     
 
     def get(self):
         Bill_id = request.args.get("Bill_id")
