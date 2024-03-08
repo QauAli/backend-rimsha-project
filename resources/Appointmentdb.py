@@ -1,5 +1,5 @@
 import mysql.connector
-
+import datetime
 class MyDatabase:
     def __init__(self):
 # Establish a connection to the MySQL server
@@ -99,18 +99,19 @@ class MyDatabase:
 
 
 
-    def get_total_appointments_in_month(self, start_date, end_date):
-        try:
-            query = "SELECT COUNT(*) FROM appointment WHERE Appointment_Date >= %s AND Appointment_Date <= %s"
-            self.cursor.execute(query, (start_date, end_date))
+    def get_appointments_in_month(self, year, month):
+     month = int(month)
 
-            # Fetch the count value
-            total_appointments = self.cursor.fetchone()[0]
-            return total_appointments
+     first_day_of_month = datetime.datetime(year, month, 1)
+     last_day_of_month = datetime.datetime(year, month + 1, 1) if month < 12 else datetime.datetime(year + 1, 1, 1)
 
-        except Exception as e:
-            # Handle exceptions appropriately (e.g., log the error)
-            return {"error": str(e)}
+     query = (
+        "SELECT COUNT(*) FROM appointment "
+        "WHERE Appointment_Date >= %s AND Appointment_Date < %s"
+     )
+     self.cursor.execute(query, (first_day_of_month, last_day_of_month))
+     total_appointments_in_month = self.cursor.fetchone()[0]
+     return total_appointments_in_month
         
         
 

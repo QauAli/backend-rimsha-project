@@ -5,6 +5,7 @@ from flask_smorest import Blueprint, abort
 from resources.schemas import AppointmentSchema
 from resources.schemas import AppointmentAddSchema
 from resources.schemas import MarkRead
+from resources.schemas import BillInMonth
 from resources.Appointmentdb import MyDatabase
 
 blp = Blueprint("appointment", __name__, description="Operations on appointment")
@@ -99,19 +100,14 @@ class MarkReadAppointment(MethodView):
 
 
 @blp.route("/total_appointments_in_month")
-class TotalAppointments(MethodView):
+class AppointmentsInMonth(MethodView):
     def __init__(self):
         self.db = MyDatabase()
 
-    def get(self, year, month):
-        try:
-            start_date = datetime(year, month, 1)
-            end_date = start_date.replace(day=1, month=start_date.month+1) - timedelta(days=1)
+    @blp.arguments(BillInMonth)
+    def get(self, request_data):
+        year = request_data.get('year')
+        month = request_data.get('month')
+        total_appointments_in_month = self.db.get_appointments_in_month(year, month)
 
-            total_appointments = self.db.get_total_appointments_in_month(start_date, end_date)
-            response = {"total_appointments": total_appointments}
-            return response
-
-        except Exception as e:
-            # Handle exceptions appropriately (e.g., log the error)
-            return {"error": str(e)}
+        return {"total_appointments_in_month": total_appointments_in_month}

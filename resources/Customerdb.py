@@ -79,15 +79,23 @@ class MyDatabase:
 
 
 
-    def update_feedback(self, C_Email_Id, Feedback):
+    def update_feedback(self, C_Email_Id, Feedback,rating):
         try:
-            query = f"UPDATE customer SET Feedback='{Feedback}' WHERE C_Email_Id='{C_Email_Id}'"
+            query = f"UPDATE customer SET Feedback='{Feedback}', rating='{rating}' WHERE C_Email_Id='{C_Email_Id}'"
             self.cursor.execute(query)
             self.connection.commit()
         except Exception as e:
             print(f"Error adding feedback: {str(e)}")
             self.connection.rollback()
 
+
+    # def get_total_feedbacks(self):
+    #     query = f"SELECT COUNT(*) FROM customer WHERE Feedback = '{Feedback}'"
+    #     self.cursor.execute(query)
+    
+    # Fetch the count value
+        # total_feedbacks = self.cursor.fetchone()[0]
+        # return total_feedbacks
 
     def check_customer(self, C_Email_Id):
         query = f"SELECT * FROM customer WHERE C_Email_Id = '{C_Email_Id}'"

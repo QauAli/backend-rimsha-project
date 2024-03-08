@@ -1,4 +1,5 @@
 import mysql.connector
+import datetime
 
 class MyDatabase:
     def __init__(self):
@@ -80,6 +81,23 @@ class MyDatabase:
         total_bills = self.cursor.fetchone()[0]
         return total_bills
 
+
+
+    def get_bills_in_month(self, year, month):
+     month = int(month)
+
+     first_day_of_month = datetime.datetime(year, month, 1)
+     last_day_of_month = datetime.datetime(year, month + 1, 1) if month < 12 else datetime.datetime(year + 1, 1, 1)
+
+     query = (
+        "SELECT COUNT(*) FROM bills "
+        "WHERE Bill_date >= %s AND Bill_date < %s"
+     )
+     self.cursor.execute(query, (first_day_of_month, last_day_of_month))
+
+     total_bills_in_month = self.cursor.fetchone()[0]
+
+     return total_bills_in_month
 
 
     def close(self):

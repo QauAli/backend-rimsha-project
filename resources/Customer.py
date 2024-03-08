@@ -192,15 +192,27 @@ class TotalCustomers(MethodView):
 class Feedback(MethodView):
     def __init__(self):
         self.db = MyDatabase()
-
+# put is used because it updates the existing customer email feedback as i use post it posts same id feedback in the same table
     def put(self):
         request_data = request.get_json()
         C_Email_Id = request_data.get('C_Email_Id')
         Feedback = request_data.get('Feedback')
+        rating = request_data.get('rating')
 
         # Check if the customer already exists based on email
         if self.db.check_customer(C_Email_Id):
-            self.db.update_feedback(C_Email_Id, Feedback)
-            return {'message': "Feedback added successfully"}, 201
+            self.db.update_feedback(C_Email_Id, Feedback,rating)
+            return {'message': "Feedback send successfully, thanks for your feedback"}, 201
         else:
             return {'error': "Customer does not exist"}, 404
+        
+
+@blp.route("/total_feedbacks")
+class TotalFeedbacks(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    def get(self):
+        total_feedbacks = self.db.get_total_feedbacks()
+        response = {"total_feedbacks": total_feedbacks}
+        return response

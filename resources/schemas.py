@@ -101,3 +101,8 @@ class ContactUsSchema(Schema):
     LastName  = fields.String()
     Email_id  = fields.String()
     Message  = fields.String()
+
+
+class BillInMonth(Schema):
+   year = fields.Integer(required=True)
+   month = fields.Integer(required=True)
