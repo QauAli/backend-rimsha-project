@@ -100,8 +100,7 @@ class MyDatabase:
 
 
 
-    def get_appointments_in_month(self, year, month):
-        month = int(month)
+    def get_appointments_in_month(self, year):
         query = (
             "SELECT MONTH(Appointment_Date) AS month, COUNT(*) AS appointment_count "
             "FROM appointment "

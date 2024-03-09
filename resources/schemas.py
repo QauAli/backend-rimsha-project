@@ -105,4 +105,3 @@ class ContactUsSchema(Schema):
 
 class BillInMonth(Schema):
    year = fields.Integer(required=True)
-   month = fields.Integer(required=True)
