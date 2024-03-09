@@ -104,8 +104,7 @@ class AppointmentsInMonth(MethodView):
         self.db = MyDatabase()
 
     @blp.arguments(BillInMonth)
-    def get(self, request_data):
+    def post(self, request_data):
         year = request_data.get('year')
         total_appointments_in_month = self.db.get_appointments_in_month(year)
-
         return {"total_appointments_in_month": total_appointments_in_month}

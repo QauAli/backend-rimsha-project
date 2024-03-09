@@ -197,11 +197,10 @@ class Feedback(MethodView):
         request_data = request.get_json()
         C_Email_Id = request_data.get('C_Email_Id')
         Feedback = request_data.get('Feedback')
-        rating = request_data.get('rating')
 
         # Check if the customer already exists based on email
         if self.db.check_customer(C_Email_Id):
-            self.db.update_feedback(C_Email_Id, Feedback,rating)
+            self.db.update_feedback(C_Email_Id, Feedback)
             return {'message': "Feedback send successfully, thanks for your feedback"}, 201
         else:
             return {'error': "Customer does not exist"}, 404
@@ -216,3 +215,5 @@ class TotalFeedbacks(MethodView):
         customers_with_feedback = self.db.get_customers_with_feedback()
         response = {"customers_with_feedback": customers_with_feedback}
         return response
+
+

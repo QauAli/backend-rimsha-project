@@ -79,9 +79,9 @@ class MyDatabase:
 
 
 
-    def update_feedback(self, C_Email_Id, Feedback,rating):
+    def update_feedback(self, C_Email_Id, Feedback):
         try:
-            query = f"UPDATE customer SET Feedback='{Feedback}', rating='{rating}' WHERE C_Email_Id='{C_Email_Id}'"
+            query = f"UPDATE customer SET Feedback='{Feedback}' WHERE C_Email_Id='{C_Email_Id}'"
             self.cursor.execute(query)
             self.connection.commit()
         except Exception as e:

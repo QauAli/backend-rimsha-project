@@ -105,3 +105,7 @@ class ContactUsSchema(Schema):
 
 class BillInMonth(Schema):
    year = fields.Integer(required=True)
+
+
+class MYBills(Schema):
+    C_Email_Id = fields.Str(required=True)

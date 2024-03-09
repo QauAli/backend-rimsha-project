@@ -100,6 +100,23 @@ class MyDatabase:
      return total_bills_in_month
 
 
+
+    def get_prev_bills(self, C_Email_Id):
+        result = []
+        query = f"SELECT * FROM bills WHERE C_Email_Id = '{C_Email_Id}'"
+        self.cursor.execute(query)
+
+        for row in self.cursor.fetchall():
+         bill_dict = {}
+         bill_dict["Bill_id"] = row[0]
+         bill_dict["B_amount"] = row[1]
+         bill_dict["Service_id"] = row[2]
+         bill_dict["Bill_date"] = row[6]
+         result.append(bill_dict)
+
+        return result
+
+
     def close(self):
 # Close the cursor and connection when done
       self.cursor.close()

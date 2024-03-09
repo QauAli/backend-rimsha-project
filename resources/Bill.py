@@ -4,6 +4,7 @@ from flask_smorest import Blueprint, abort
 from resources.schemas import BillSchema
 from resources.schemas import BillUpdateSchema
 from resources.schemas import BillInMonth
+from resources.schemas import MYBills
 from resources.Billdb import MyDatabase
 
 blp = Blueprint("Bill", __name__, description="Operations on bill")
@@ -92,3 +93,17 @@ class BillsInMonth(MethodView):
         total_bills_in_month = self.db.get_bills_in_month(year, month)
 
         return {"total_bills_in_month": total_bills_in_month}
+    
+
+@blp.route("/my_bills")
+class BillsInMonth(MethodView):
+    def __init__(self):
+        self.db = MyDatabase()
+
+    @blp.arguments(MYBills)
+    def post(self, request_data):
+        C_Email_Id = request_data.get('C_Email_Id')
+       
+        Prev_Bills = self.db.get_prev_bills(C_Email_Id)
+
+        return {"Prev_Bills": Prev_Bills}
