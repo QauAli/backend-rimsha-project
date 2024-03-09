@@ -66,9 +66,9 @@ class AppointmentAddSchema(Schema):
     Name = fields.Str(required=True)
     C_Email_Id = fields.Str(required=True)
     Car_Model_Make = fields.Str(required=True)
-    City = fields.Str(required=True)
+    City = fields.Str()
     ContactNo = fields.Int(required=True)
-    Description = fields.Str(required=True)
+    Description = fields.Str()
 
 
 class AdminSchema(Schema):

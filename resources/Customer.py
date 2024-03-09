@@ -213,6 +213,6 @@ class TotalFeedbacks(MethodView):
         self.db = MyDatabase()
 
     def get(self):
-        total_feedbacks = self.db.get_total_feedbacks()
-        response = {"total_feedbacks": total_feedbacks}
+        customers_with_feedback = self.db.get_customers_with_feedback()
+        response = {"customers_with_feedback": customers_with_feedback}
         return response

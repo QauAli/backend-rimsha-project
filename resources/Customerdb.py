@@ -89,13 +89,12 @@ class MyDatabase:
             self.connection.rollback()
 
 
-    # def get_total_feedbacks(self):
-    #     query = f"SELECT COUNT(*) FROM customer WHERE Feedback = '{Feedback}'"
-    #     self.cursor.execute(query)
-    
-    # Fetch the count value
-        # total_feedbacks = self.cursor.fetchone()[0]
-        # return total_feedbacks
+    def get_customers_with_feedback(self):
+        query = "SELECT * FROM customer WHERE Feedback IS NOT NULL"
+        self.cursor.execute(query)
+        customers_with_feedback = self.cursor.fetchall()
+        return customers_with_feedback
+
 
     def check_customer(self, C_Email_Id):
         query = f"SELECT * FROM customer WHERE C_Email_Id = '{C_Email_Id}'"

@@ -1,5 +1,6 @@
 import mysql.connector
 import datetime
+from flask import jsonify
 class MyDatabase:
     def __init__(self):
 # Establish a connection to the MySQL server
@@ -100,20 +101,25 @@ class MyDatabase:
 
 
     def get_appointments_in_month(self, year, month):
-     month = int(month)
+        month = int(month)
+        query = (
+            "SELECT MONTH(Appointment_Date) AS month, COUNT(*) AS appointment_count "
+            "FROM appointment "
+            "WHERE YEAR(Appointment_Date) = %s "
+            "GROUP BY MONTH(Appointment_Date)"
+        )
 
-     first_day_of_month = datetime.datetime(year, month, 1)
-     last_day_of_month = datetime.datetime(year, month + 1, 1) if month < 12 else datetime.datetime(year + 1, 1, 1)
+        try:
+            self.cursor.execute(query, (year,))
+            results = self.cursor.fetchall()
 
-     query = (
-        "SELECT COUNT(*) FROM appointment "
-        "WHERE Appointment_Date >= %s AND Appointment_Date < %s"
-     )
-     self.cursor.execute(query, (first_day_of_month, last_day_of_month))
-     total_appointments_in_month = self.cursor.fetchone()[0]
-     return total_appointments_in_month
-        
-        
+            # Assuming you want to return the result as JSON
+            response = [{'month': int(result[0]), 'appointment_count': int(result[1])} for result in results]
+            return response
+
+        except Exception as e:
+            error_response = {'error': str(e)}
+            return error_response, 500
 
     def close(self):
 # Close the cursor and connection when done

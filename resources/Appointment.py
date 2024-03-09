@@ -61,7 +61,6 @@ class Appointment(MethodView):
 
 
 
-# @blp.route('/appointment', methods=['DELETE'])
 
     def delete(self):
         Appointment_id = request.args.get('Appointment_id')  # Use request.args.get to retrieve 'id' from the query parameters
